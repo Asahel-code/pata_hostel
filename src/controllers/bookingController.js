@@ -79,20 +79,20 @@ const rentPayment = async (req, res) => {
 
         const user = await User.findOne({ _id: res.tenant.tenant.user._id });
 
-        // gmailTransport().sendMail({
-        //     from: process.env.GMAIL_USER_NAME,
-        //     to: user.email,
-        //     subject: `Rental payment`,
-        //     html: paymentEmailTemplate(res.tenant),
-        // },
-        //     (error, body) => {
-        //         if (error) {
-        //             console.log(error);
-        //         } else {
-        //             console.log(body);
-        //         }
-        //     }
-        // );
+        gmailTransport().sendMail({
+            from: process.env.GMAIL_USER_NAME,
+            to: user.email,
+            subject: `Rental payment`,
+            html: paymentEmailTemplate(res.tenant),
+        },
+            (error, body) => {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log(body);
+                }
+            }
+        );
 
         return res.status(200).json({ message: 'Rental fee payed successfully' });
     }
@@ -118,20 +118,20 @@ const approvePayment = async (req, res) => {
 
         const user = await User.findOne({ _id: res.tenant.tenant.user._id });
 
-        // gmailTransport().sendMail({
-        //     from: process.env.GMAIL_USER_NAME,
-        //     to: user.email,
-        //     subject: `Payment approved`,
-        //     html: paymentApprovedEmailTemplate(res.tenant),
-        // },
-        //     (error, body) => {
-        //         if (error) {
-        //             console.log(error);
-        //         } else {
-        //             console.log(body);
-        //         }
-        //     }
-        // );
+        gmailTransport().sendMail({
+            from: process.env.GMAIL_USER_NAME,
+            to: user.email,
+            subject: `Payment approved`,
+            html: paymentApprovedEmailTemplate(res.tenant),
+        },
+            (error, body) => {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log(body);
+                }
+            }
+        );
 
         return res.status(200).json({ message: "Payment has been approved" });
     }

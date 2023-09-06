@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import BookingServices from "../../utils/services/BookingServices";
 import { toastProps } from "../../utils/toastProps";
 import { getError } from "../../utils/getError";
-import { useHouseStore } from "../../utils/zustand/Store";
+import useUserStore, { useHouseStore } from "../../utils/zustand/Store";
 
 const RoomNumber = ({ roomNumber, hostel }) => {
 
@@ -13,6 +13,8 @@ const RoomNumber = ({ roomNumber, hostel }) => {
   const navigate = useNavigate();
 
   const [isSpaceAvailable, setIsSpaceAvailable] = useState(false);
+
+  const user = useUserStore((state) => state.user);
 
   useEffect(() => {
     BookingServices.checkRoomSpaceAvailability(roomNumber, hostel?.numberPerRoom).then(async (response) => {
@@ -25,28 +27,38 @@ const RoomNumber = ({ roomNumber, hostel }) => {
   const setHouse = useHouseStore((state) => state.setHouse);
 
   const handleCheckRoomAvailability = async () => {
-    try {
-      await BookingServices.checkIfTenantHasBookedBefore().then((response) => {
-        if (response.message === "can book") {
-          navigate(`/hostel/${hostel.slug}/${roomNumber}`)
-          setHouse(hostel);
-        }
-        else {
-          toast({
-            ...toastProps,
-            description: "Your have already booked a space",
-            status: "success"
-          })
-        }
-      })
-    } catch (error) {
+    if (user?.isAdmin || user?.isLandLord) {
       toast({
         ...toastProps,
-        title: "Error!",
-        description: getError(error),
+        description: "Sorry, your priviledge does not allow you to book a hostel",
         status: "error"
       })
     }
+    else {
+      try {
+        await BookingServices.checkIfTenantHasBookedBefore().then((response) => {
+          if (response.message === "can book") {
+            navigate(`/hostel/${hostel.slug}/${roomNumber}`)
+            setHouse(hostel);
+          }
+          else {
+            toast({
+              ...toastProps,
+              description: "Sorry, your have already have space booked. Please check your on 'My booking'",
+              status: "error"
+            })
+          }
+        })
+      } catch (error) {
+        toast({
+          ...toastProps,
+          title: "Error!",
+          description: getError(error),
+          status: "error"
+        })
+      }
+    }
+
   }
 
   return isSpaceAvailable ? (
@@ -55,7 +67,7 @@ const RoomNumber = ({ roomNumber, hostel }) => {
         {roomNumber}
       </div>
     </div>
-  ): (
+  ) : (
     <div className="p-6 bg-gray-200 text-gray-800 shadow-none rounded-md">
       <div className="flex justify-center items-center">
         {roomNumber}

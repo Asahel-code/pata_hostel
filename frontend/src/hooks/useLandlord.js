@@ -11,6 +11,7 @@ export const useLandlord = (searchValue) => {
 
     const [landlords, setLandlords] = useState([]);
     const [filteredLandlords, setFilteredLandlords] = useState([]);
+    const [landLordCount, setLandlordCount] = useState(0);
     const [stateLoading, setStateLoading] = useState(true);
 
     const handleSearch = (arr, cond) => {
@@ -45,6 +46,8 @@ export const useLandlord = (searchValue) => {
                 setLandlords(arr);
                 setFilteredLandlords(arr);
                 setStateLoading(false);
+
+                setLandlordCount(response?.reduce((acc, obj) => obj ? acc += 1 : acc, 0))
             })
                 .catch((error) => {
                     toast({
@@ -65,7 +68,7 @@ export const useLandlord = (searchValue) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [landlords, searchValue]);
 
-    return { stateLoading, landlords, filteredLandlords };
+    return { stateLoading, landlords, filteredLandlords, landLordCount };
 }
 
 export const useSpecificLandLord = () => {

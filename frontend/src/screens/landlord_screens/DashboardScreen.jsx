@@ -8,16 +8,15 @@ import Loader from "../../components/general/Loader";
 
 export const DashboardScreen = () => {
 
-  const { stateLoading, bookingSummary } = useLandlordTenants();
+  const { stateLoading, awaitingPaymentCount, occupiedSpaceCount, bookingSummary } = useLandlordTenants();
 
-  console.log(bookingSummary)
   return (
     <AdminLayout>
       <div className="max-h-[calc(100%-80px)] p-3 overflow-y-scroll">
 
         <LandlordCard
-          totalOccupiedSpace={132}
-          awaitingPayment={40}
+          totalOccupiedSpace={occupiedSpaceCount}
+          awaitingPayment={awaitingPaymentCount}
         />
 
         {/* Revenue breakdown */}

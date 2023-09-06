@@ -14,7 +14,6 @@ export const useTenantAndHostelCount = () => {
     useEffect(() => {
         const fetchTenantAndHostelCount = async () => {
             await CountServices.fetchTenantAndHostelCount().then((response) => {
-                console.log(response);
                 setHostelCount(response.hostelsCount);
                 setTenantCount(response.tenantsCount);
                 setStateLoading(false);

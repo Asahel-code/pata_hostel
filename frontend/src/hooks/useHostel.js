@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useToast } from '@chakra-ui/react';
 import _ from "lodash";
 import { getError } from '../utils/getError';
@@ -11,6 +11,9 @@ export const useHostel = (searchValue) => {
 
     const [hostels, setHostels] = useState([]);
     const [filteredHostels, setFilteredHostels] = useState([]);
+    const [hostelLocations, setHostelsLocations] = useState([]);
+    const [hostelCountPerLocation, setHostelCountPerLocation] = useState([]);
+    const [hostelCount, setHostelCount] = useState(0);
     const [stateLoading, setStateLoading] = useState(true);
     const [loading, setLoading] = useState(false);
 
@@ -51,6 +54,38 @@ export const useHostel = (searchValue) => {
                 setHostels(arr);
                 setFilteredHostels(arr);
                 setStateLoading(false);
+
+                const hostels = Object.entries(
+                    response.reduce((b, a) => {
+                        let location = a.region.name;
+                        if (Object.prototype.hasOwnProperty.call(b, location))
+                            b[location].push(a);
+                        else
+                            b[location] = [a];
+                        return b;
+                    }, Object.create(null))
+                )
+                    .sort((a, b) => a[0].localeCompare(b[0]))
+                    .map((e) => ({ [e[0]]: e[1] }));
+
+                let locationsArray = []
+                let hostelCount = []
+
+                console.log(hostels);
+
+                hostels.forEach((item) => {
+                    const key = Object.keys(item)[0];
+                    locationsArray.push(key);
+
+                    const arrayOfHostels = Object.values(item)[0];
+
+                    const totalMonthlyBooking = arrayOfHostels?.reduce((acc, obj) => obj ? acc += 1 : acc, 0);
+                    hostelCount.push(totalMonthlyBooking)
+                });
+
+                setHostelsLocations(locationsArray);
+                setHostelCountPerLocation(hostelCount);
+                setHostelCount(response?.reduce((acc, obj) => obj ? acc += 1 : acc, 0));
             })
                 .catch((error) => {
                     toast({
@@ -109,7 +144,43 @@ export const useHostel = (searchValue) => {
         }
     }
 
-    return { stateLoading, loading, hostels, filteredHostels, handleHostelSearch };
+    const hostelSpread = useMemo(
+        () => ({
+          options: {
+            plugins: {
+              centerText: {
+                display: true,
+                text: "90%",
+              },
+              legend: {
+                display: true,
+                position: "bottom",
+              },
+            },
+          },
+    
+          data: {
+            labels: hostelLocations,
+            datasets: [
+              {
+                label: "Count",
+                data: hostelCountPerLocation,
+                backgroundColor: [
+                  "#6EF07B",
+                  "#6FCDFB",
+                  "#FF65C1",
+                  "#BB1600",
+                  "#FFCF63",
+                ],
+              },
+            ],
+            text: "35",
+          },
+        }),
+        [hostelLocations, hostelCountPerLocation]
+      );
+
+    return { stateLoading, loading, hostels, filteredHostels, handleHostelSearch, hostelCount, hostelSpread };
 
 }
 

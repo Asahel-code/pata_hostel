@@ -14,7 +14,10 @@ export const useLandlordTenants = (searchValue) => {
     const [filteredTenants, setFilteredTenants] = useState([]);
     const [bookingPerMonth, setBookingPerMonth] = useState([]);
     const [barChartMonths, setBarChartMonths] = useState([]);
+    const [awaitingPaymentCount, setAwaitPaymentCount] = useState(0);
+    const [occupiedSpaceCount, setOccupiedSpaceCount] = useState(0);
     const [stateLoading, setStateLoading] = useState(true);
+
 
     const handleSearch = (arr, cond) => {
         const newArr = _.filter(arr, (obj) => {
@@ -80,11 +83,14 @@ export const useLandlordTenants = (searchValue) => {
 
                     const arrayOfTenants = Object.values(item)[0];
 
-                    const totalMonthlyBooking = arrayOfTenants?.reduce((acc, obj) => obj ? acc += obj : acc, 0);
+                    const totalMonthlyBooking = arrayOfTenants?.reduce((acc, obj) => obj ? acc += 1 : acc, 0);
                     bookingCount.push(totalMonthlyBooking)
                 });
                 setBookingPerMonth(bookingCount);
                 setBarChartMonths(monthsArray);
+
+                setAwaitPaymentCount(response?.reduce((acc, obj) => !obj?.tenant?.isPaid ? acc += 1 : acc, 0));
+                setOccupiedSpaceCount(response?.reduce((acc, obj) => obj?.tenant?.isPaid && obj?.tenant?.paymentDueDate > new Date().toISOString() ? acc += 1 : acc, 0))
 
             })
                 .catch((error) => {
@@ -134,7 +140,7 @@ export const useLandlordTenants = (searchValue) => {
     );
 
 
-    return { stateLoading, tenants, filteredTenants, bookingSummary };
+    return { stateLoading, tenants, filteredTenants, awaitingPaymentCount, occupiedSpaceCount, bookingSummary };
 }
 
 export const useTenantBooking = () => {
@@ -149,21 +155,21 @@ export const useTenantBooking = () => {
             let arr = [];
             await BookingServices.fetchUserBookings().then((response) => {
                 response.forEach((element) => {
-                    const paymentStatus = !element?.tenant?.isPaid ? "awaiting payment"
-                        : (element?.tenant?.Paid && element?.tenant?.paymentDueDate >= Date.now()) ? "rental pay due" :
-                            (element?.tenant?.Paid && !element?.tenant?.isPaymentApproved) ? "awaiting approval"
+                    const paymentStatus = !element?.isPaid ? "awaiting payment"
+                        : (element?.tenant?.Paid && element?.paymentDueDate >= Date.now()) ? "rental pay due" :
+                            (element?.tenant?.Paid && !element?.isPaymentApproved) ? "awaiting approval"
                                 : "paid";
 
                     const tenantObj = {
-                        id: element?.tenant?._id || "",
-                        name: element?.tenant?.userDetails?.firstname + " " + element?.tenant?.userDetails?.lastname || "",
-                        hostel: element?.hostel?.name,
-                        roomNo: element?.tenant?.roomNo,
-                        tenantPhoneNumber: "+254".concat(element?.tenant?.userDetails?.phoneNumber) || "",
-                        occumpationStartDate: element?.tenant?.paidAt || "--",
-                        occumpationDueDate: element?.tenant?.paymentDueDate || "--",
-                        isPaid: element?.tenant?.isPaid || "",
-                        isApproved: element?.tenant?.isPaymentApproved || "",
+                        id: element?._id || "",
+                        name: element?.userDetails?.firstname + " " + element?.userDetails?.lastname || "",
+                        hostel: element?.house?.hostel?.name,
+                        roomNo: element?.roomNo,
+                        tenantPhoneNumber: "+254".concat(element?.userDetails?.phoneNumber) || "",
+                        occumpationStartDate: element?.paidAt || "--",
+                        occumpationDueDate: element?.paymentDueDate || "--",
+                        isPaid: element?.isPaid || "",
+                        isApproved: element?.isPaymentApproved || "",
                         paymentStatus: paymentStatus || ""
                     }
                     arr.push(tenantObj)

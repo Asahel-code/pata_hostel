@@ -5,7 +5,7 @@ import { RxCross2 } from "react-icons/rx";
 
 const MessageBox = ({ status, children }) => {
 
-  const messageBoxStyling = "py-1 px-2 rounded-xl flex items-center gap-1 text-md";
+  const messageBoxStyling = "py-1 px-2 rounded-xl flex items-center gap-1 text-md font-semibold w-fit";
   return (
     <button className={status == "paid" ? `${messageBoxStyling} text-primary_green bg-primary_green_light` : (status == "awaiting approval" || status == "awaiting payment") ? `${messageBoxStyling} text-yellow-500 bg-yellow-200` : status == "rental pay due" && `${messageBoxStyling} text-primary_red bg-primary_red_light`}>
       {children}
