@@ -90,7 +90,6 @@ export const CustomSelect = ({
                 height={"40px"}
                 my={"0"}
                 mx={"1"}
-                out
                 onChange={handleChange}
                 value={value}
                 name={name}

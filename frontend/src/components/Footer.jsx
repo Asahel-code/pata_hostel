@@ -38,11 +38,11 @@ const FooterSection = () => {
                 <div className="w-full">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:gap-16 sm:gap-10">
                         <div>
-                            <p className="mb-4">
+                            <div className="mb-4">
                                 <Link to="/">
                                     <h2 className="text-xl font-bold">Pata Hostel</h2>
                                 </Link>
-                            </p>
+                            </div>
                             <div className="flex gap-2 text-gray-700">
                                 <span><ImQuotesLeft /></span>
                                 <span>

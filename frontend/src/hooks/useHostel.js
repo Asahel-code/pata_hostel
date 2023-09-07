@@ -71,8 +71,6 @@ export const useHostel = (searchValue) => {
                 let locationsArray = []
                 let hostelCount = []
 
-                console.log(hostels);
-
                 hostels.forEach((item) => {
                     const key = Object.keys(item)[0];
                     locationsArray.push(key);

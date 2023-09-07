@@ -172,7 +172,7 @@ const Header = () => {
             </div>
             {openNav &&
                 <Box
-                    className="fixed top-15 right-0 w-full px-5 bg-gray-100 z-[99]"
+                    className="fixed top-15 right-0 w-full px-5 bg-white z-[99]"
                     style={{
                         transform: "translateX(-0%)",
                         transition: "transform 0.10s ease",
