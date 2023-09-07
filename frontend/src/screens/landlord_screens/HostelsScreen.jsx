@@ -11,13 +11,21 @@ import CustomInput from "../../components/general/CustomInput";
 import numberWithCommas from "../../utils/numberWithCommas";
 import AddHostelModal from "../../modals/AddHostelModal";
 import { useLandlordHostel } from "../../hooks/useHostel";
+import DeleteAlert from "../../components/general/DeleteAlert";
+import HouseServices from "../../utils/services/HouseServices";
+import { useToast } from "@chakra-ui/react";
+import { toastProps } from "../../utils/toastProps";
+import { getError } from "../../utils/getError";
 
 export const HostelsScreen = () => {
 
   const navigate = useNavigate();
+  const toast = useToast();
 
   const [searchValue, setSearchValue] = useState("");
   const [openAddHostelModal, setOpenAddHostelModal] = useState(false);
+  const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
+  const [hostelId, setHostelId] = useState("");
 
   const { stateLoading, filteredHostels } = useLandlordHostel(searchValue);
 
@@ -29,9 +37,40 @@ export const HostelsScreen = () => {
     setOpenAddHostelModal(false);
   }, []);
 
+  const handleOpenDeleteAlert = useCallback(() => {
+    setOpenDeleteAlert(true);
+  }, []);
+
+  const handleCloseDeleteAlert = useCallback(() => {
+    setOpenDeleteAlert(false);
+  }, []);
+
   const handleViewHostel = (hostel) => {
     navigate(`${hostel?.slug}`, hostel);
   };
+
+  const handleDelete = async (id) => {
+    try {
+      await HouseServices.deleteHouse(id).then(() => {
+        toast({
+          ...toastProps,
+          title: "Success",
+          description: "Hostel has been deleted successfully",
+          status: "success",
+        });
+      });
+      handleCloseDeleteAlert();
+      window.location.reload();
+    } catch (error) {
+      toast({
+        ...toastProps,
+        title: "Error!",
+        description: getError(error),
+        status: "error",
+      });
+      handleCloseDeleteAlert();
+    }
+  }
 
   const columns = [
     {
@@ -70,7 +109,10 @@ export const HostelsScreen = () => {
               <FiEdit />
             </ActionButton>
 
-            <ActionButton handleClick={() => { }}>
+            <ActionButton handleClick={() => {
+              handleOpenDeleteAlert(),
+                setHostelId(n?.id)
+            }}>
               <AiOutlineDelete />
             </ActionButton>
           </div>
@@ -128,6 +170,14 @@ export const HostelsScreen = () => {
         <AddHostelModal
           handleOpen={openAddHostelModal}
           handleClose={handleCloseAddHostelModal}
+        />
+
+        <DeleteAlert
+          handleOpen={openDeleteAlert}
+          handleClose={handleCloseDeleteAlert}
+          handleDelete={handleDelete}
+          id={hostelId}
+          body="Are you sure you would like to delete this hostel??"
         />
       </div>
     </AdminLayout>

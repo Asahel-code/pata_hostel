@@ -162,7 +162,7 @@ const updateHouseImages = async (req, res) => {
 
 const deleteHouse = async (req, res) => {
   try {
-    await res.house.remove();
+    await House.deleteOne({id: res.house._id});
     return res.status(204).json({ message: "House deleted" });
   }
   catch (error) {
