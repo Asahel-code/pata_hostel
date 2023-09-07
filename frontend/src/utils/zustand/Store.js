@@ -28,11 +28,14 @@ export const useHouseStore = create(
         house: {
           hostel: null,
           landlord: null,
+          name: null,
+          slug: null,
+          termsAndCondition: null,
         },
         setHouse: (response) =>
-          set((state) => ({ house: { ...state.house, hostel: response?._id, landlord: response?.landlord} })),
+          set((state) => ({ house: { ...state.house, hostel: response?.house?._id, landlord: response?.house.landlord, name: response?.house?.name, slug: response?.house?.slug, termsAndCondition: response?.landLord?.termsAndCondition } })),
         removeHouse: () =>
-          set((state) => ({ house: { ...state.house, hostel: null, landlord: null } })),
+          set((state) => ({ house: { ...state.house, hostel: null, landlord: null, name: null, slug: null, termsAndCondition: null, } })),
       }),
       { name: "pata_hostel_house" }
     )

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import UserLayout from "../../components/UserLayout"
 import { useParams, useNavigate } from "react-router-dom"
 import { Box, FormControl, FormLabel, useToast } from "@chakra-ui/react";
@@ -11,6 +11,7 @@ import Helmet from "../../components/general/Helemet";
 import { useHouseStore } from "../../utils/zustand/Store";
 import BookingServices from "../../utils/services/BookingServices";
 import { getError } from "../../utils/getError";
+import TermsAndConditionModal from "../../modals/TermsAndConditionModal";
 
 export const BookRoomScreen = () => {
     let { room_number } = useParams();
@@ -21,6 +22,7 @@ export const BookRoomScreen = () => {
     const removeHouse = useHouseStore((state) => state.removeHouse);
 
     const [loading, setLoading] = useState(false);
+    const [showHostelTermsAndConditions, setShowHostelTermsAndConditions] = useState(false);
     const [state, setState] = useState({
         firstname: "",
         lastname: "",
@@ -31,7 +33,7 @@ export const BookRoomScreen = () => {
         phoneNumber: "",
     });
 
-    const handleValidation = () => {
+    const handleValidation = useCallback(() => {
         if (state.firstname === "") {
             toast({
                 ...toastProps,
@@ -99,7 +101,21 @@ export const BookRoomScreen = () => {
         }
 
         return true;
-    }
+    },[state.firstname, state.lastname, state.persona, state.phoneNumber, state.idNo, state.school, state.regNo, toast])
+
+    const handleOpenHostelTermsAndConditions = useCallback(() => {
+
+        const isValid = handleValidation();
+
+        if (!isValid) return;
+        
+        setShowHostelTermsAndConditions(true);
+    }, [handleValidation]);
+
+    const handleCLoseHostelTermsAndConditions = useCallback(() => {
+        setShowHostelTermsAndConditions(false);
+    }, []);
+
 
     const handleChange = (e) => {
         e.persist();
@@ -142,6 +158,7 @@ export const BookRoomScreen = () => {
                 });
                 setLoading(false);
                 removeHouse();
+                handleCLoseHostelTermsAndConditions();
                 navigate('/')
             })
         } catch (error) {
@@ -158,125 +175,134 @@ export const BookRoomScreen = () => {
     return (
         <UserLayout>
             <Helmet title={`Book Room ${room_number}`}>
-                <div className="mt-24 mx-10 md:mx-20">
-                    <div>
-                        <h3 className="font-bold text-2xl">Room No: <span className="text-primary_color">{room_number}</span></h3>
-                    </div>
-                    <div className="my-12">
-                        <p className="text-xl mb-4">Your Information</p>
-                        <div className="">
-                            <form onSubmit={handleSubmit} className="">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <Box className="flex flex-col gap-1 w-full">
+                <div>
+                    <div className="mt-24 mx-10 md:mx-20">
+                        <div>
+                            <h3 className="font-bold text-2xl">Room No: <span className="text-primary_color">{room_number}</span></h3>
+                        </div>
+                        <div className="my-12">
+                            <p className="text-xl mb-4">Your Information</p>
+                            <div className="">
+                                <div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <Box className="flex flex-col gap-1 w-full">
+                                            <FormControl my={2} isRequired>
+                                                <FormLabel>First name</FormLabel>
+                                                <CustomInput
+                                                    width="full"
+                                                    placeholder={"First name"}
+                                                    handleChange={handleChange}
+                                                    name={"firstname"}
+                                                    type={"text"}
+                                                />
+                                            </FormControl>
+                                        </Box>
+                                        <Box className="flex  flex-col gap-1 w-full">
+                                            <FormControl my={2} isRequired>
+                                                <FormLabel>Last name</FormLabel>
+                                                <CustomInput
+                                                    width="full"
+                                                    placeholder={"Last name"}
+                                                    handleChange={handleChange}
+                                                    name={"lastname"}
+                                                    type={"text"}
+                                                />
+                                            </FormControl>
+                                        </Box>
+                                    </div>
+                                    <Box className="flex  flex-col gap-1 w-full">
                                         <FormControl my={2} isRequired>
-                                            <FormLabel>First name</FormLabel>
+                                            <FormLabel>Your phone number</FormLabel>
                                             <CustomInput
                                                 width="full"
-                                                placeholder={"First name"}
+                                                icon={<PreNumberFormart />}
+                                                placeholder={"720000000"}
                                                 handleChange={handleChange}
-                                                name={"firstname"}
-                                                type={"text"}
+                                                name={"phoneNumber"}
+                                                type={"number"}
                                             />
                                         </FormControl>
                                     </Box>
                                     <Box className="flex  flex-col gap-1 w-full">
                                         <FormControl my={2} isRequired>
-                                            <FormLabel>Last name</FormLabel>
+                                            <FormLabel>Persona</FormLabel>
+                                            <CustomSelect
+                                                width="full"
+                                                placeholder={"Your persona"}
+                                                handleChange={handleChange}
+                                                name={"persona"}
+                                            >
+                                                <option value="student">Student</option>
+                                                <option value="non-student">Non-student</option>
+                                            </CustomSelect>
+                                        </FormControl>
+                                    </Box>
+                                    {state.persona === "student" && (
+                                        <Box>
+                                            <Box className="flex  flex-col gap-1 w-full">
+                                                <FormControl my={2} isRequired>
+                                                    <FormLabel>Name of School</FormLabel>
+                                                    <CustomInput
+                                                        width="full"
+                                                        placeholder={"University/College name"}
+                                                        handleChange={handleChange}
+                                                        name={"school"}
+                                                        type={"text"}
+                                                    />
+                                                </FormControl>
+                                            </Box>
+                                            <Box className="flex  flex-col gap-1 w-full">
+                                                <FormControl my={2} isRequired>
+                                                    <FormLabel>Your student registration number</FormLabel>
+                                                    <CustomInput
+                                                        width="full"
+                                                        placeholder={"Your student registration number"}
+                                                        handleChange={handleChange}
+                                                        name={"regNo"}
+                                                        type={"text"}
+                                                    />
+                                                </FormControl>
+                                            </Box>
+                                        </Box>
+                                    )}
+                                    <Box className="flex  flex-col gap-1 w-full">
+                                        <FormControl my={2} isRequired>
+                                            <FormLabel>Your ID/ Passport number</FormLabel>
                                             <CustomInput
                                                 width="full"
-                                                placeholder={"Last name"}
+                                                placeholder={"Your ID number"}
                                                 handleChange={handleChange}
-                                                name={"lastname"}
+                                                name={"idNo"}
                                                 type={"text"}
                                             />
                                         </FormControl>
                                     </Box>
-                                </div>
-                                <Box className="flex  flex-col gap-1 w-full">
-                                    <FormControl my={2} isRequired>
-                                        <FormLabel>Your phone number</FormLabel>
-                                        <CustomInput
-                                            width="full"
-                                            icon={<PreNumberFormart />}
-                                            placeholder={"720000000"}
-                                            handleChange={handleChange}
-                                            name={"phoneNumber"}
-                                            type={"number"}
-                                        />
-                                    </FormControl>
-                                </Box>
-                                <Box className="flex  flex-col gap-1 w-full">
-                                    <FormControl my={2} isRequired>
-                                        <FormLabel>Persona</FormLabel>
-                                        <CustomSelect
-                                            width="full"
-                                            placeholder={"Your persona"}
-                                            handleChange={handleChange}
-                                            name={"persona"}
-                                        >
-                                            <option value="student">Student</option>
-                                            <option value="non-student">Non-student</option>
-                                        </CustomSelect>
-                                    </FormControl>
-                                </Box>
-                                {state.persona === "student" && (
-                                    <Box>
-                                        <Box className="flex  flex-col gap-1 w-full">
-                                            <FormControl my={2} isRequired>
-                                                <FormLabel>Name of School</FormLabel>
-                                                <CustomInput
-                                                    width="full"
-                                                    placeholder={"University/College name"}
-                                                    handleChange={handleChange}
-                                                    name={"school"}
-                                                    type={"text"}
-                                                />
-                                            </FormControl>
-                                        </Box>
-                                        <Box className="flex  flex-col gap-1 w-full">
-                                            <FormControl my={2} isRequired>
-                                                <FormLabel>Your student registration number</FormLabel>
-                                                <CustomInput
-                                                    width="full"
-                                                    placeholder={"Your student registration number"}
-                                                    handleChange={handleChange}
-                                                    name={"regNo"}
-                                                    type={"text"}
-                                                />
-                                            </FormControl>
-                                        </Box>
+                                    <Box className="my-3 flex justify-end">
+                                        {loading ?
+                                            <LoadingButton />
+                                            :
+                                            <CustomButton
+                                                type={"button"}
+                                                variant={"solid"}
+                                                width={"250px"}
+                                                handleClick={handleOpenHostelTermsAndConditions}
+                                            >
+                                                Submit
+                                            </CustomButton>
+                                        }
                                     </Box>
-                                )}
-                                <Box className="flex  flex-col gap-1 w-full">
-                                    <FormControl my={2} isRequired>
-                                        <FormLabel>Your ID/ Passport number</FormLabel>
-                                        <CustomInput
-                                            width="full"
-                                            placeholder={"Your ID number"}
-                                            handleChange={handleChange}
-                                            name={"idNo"}
-                                            type={"text"}
-                                        />
-                                    </FormControl>
-                                </Box>
-                                <Box className="my-3 flex justify-end">
-                                    {loading ?
-                                        <LoadingButton />
-                                        :
-                                        <CustomButton
-                                            type={"submit"}
-                                            variant={"solid"}
-                                            width={"250px"}
-                                        >
-                                            Submit
-                                        </CustomButton>
-                                    }
-                                </Box>
-                            </form>
+                                </div>
+                            </div>
                         </div>
-
                     </div>
+                    <TermsAndConditionModal
+                        handleOpen={showHostelTermsAndConditions}
+                        handleClose={handleCLoseHostelTermsAndConditions}
+                        handleSubmit={handleSubmit}
+                        hostel={house}
+                    />
                 </div>
+
             </Helmet>
         </UserLayout>
     )

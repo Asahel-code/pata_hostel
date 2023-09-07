@@ -8,7 +8,15 @@ const getHostelAndTenantCount = async (req, res) => {
 
         let hostelAndTenantCounts
 
-        const tenantsCount = tenants.length;
+        let occupyingTenant = [];
+
+        for(const tenant of tenants){
+            if(tenant.isPaid && tenant.isPaymentApproved && tenant.paymentDueDate > new Date()){
+                occupyingTenant.push(tenant);
+            }
+        }
+
+        const tenantsCount = occupyingTenant.length;
         const hostelsCount = hostels.length;
 
         hostelAndTenantCounts = { tenantsCount, hostelsCount }

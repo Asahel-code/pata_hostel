@@ -17,12 +17,12 @@ const RoomNumber = ({ roomNumber, hostel }) => {
   const user = useUserStore((state) => state.user);
 
   useEffect(() => {
-    BookingServices.checkRoomSpaceAvailability(roomNumber, hostel?.numberPerRoom).then(async (response) => {
+    BookingServices.checkRoomSpaceAvailability(roomNumber, hostel?.house.numberPerRoom).then(async (response) => {
       if (response.message === "Space available") {
         setIsSpaceAvailable(true)
       }
     })
-  }, [roomNumber, hostel?.numberPerRoom]);
+  }, [roomNumber, hostel?.house.numberPerRoom]);
 
   const setHouse = useHouseStore((state) => state.setHouse);
 
@@ -38,7 +38,8 @@ const RoomNumber = ({ roomNumber, hostel }) => {
       try {
         await BookingServices.checkIfTenantHasBookedBefore().then((response) => {
           if (response.message === "can book") {
-            navigate(`/hostel/${hostel.slug}/${roomNumber}`)
+            navigate(`/hostel/${hostel.house.slug}/${roomNumber}`)
+            console.log(hostel)
             setHouse(hostel);
           }
           else {

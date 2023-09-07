@@ -107,7 +107,7 @@ export const HostelScreen = () => {
                                 <h3 className="text-4xl font-semibold">Rooms Available</h3>
                                 <div className="mt-4 grid grid-cols-4 md:grid-cols-8 gap-5">
                                     {resultArray?.map((room, index) => (
-                                        <RoomNumber key={index} roomNumber={room} hostel={hostel?.house} />
+                                        <RoomNumber key={index} roomNumber={room} hostel={hostel} />
                                     ))}
 
                                 </div>
