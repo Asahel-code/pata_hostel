@@ -13,5 +13,6 @@ router.get("/check/check_if_tenant_has_booked_before", verifyAuth, bookingContro
 router.get("/:tenantId", verifyAuth, getTenant, bookingController.getSingleBooking);
 router.patch("/:tenantId/pay", verifyAuth, getTenant, bookingController.rentPayment);
 router.patch("/:tenantId/approve/pay", verifyAuth, verifyLandLordRole, getTenant, bookingController.approvePayment);
+router.delete("/:tenantId", verifyAuth, getTenant, bookingController.deleteBooking);
 
 module.exports = router;
