@@ -55,6 +55,13 @@ const checkIfTenantHasBookedBefore = async () => {
     return res.data;
 }
 
+const deleteBooking = async (id) => {
+    setAuthToken(AxiosUtility);
+    const res = await AxiosUtility.delete(`/tenant/${id}`);
+
+    return res.data;
+}
+
 const BookingServices = {
     fetchLandLordBookings,
     bookHouse,
@@ -63,7 +70,8 @@ const BookingServices = {
     makePayment,
     approvePayment,
     checkRoomSpaceAvailability,
-    checkIfTenantHasBookedBefore
+    checkIfTenantHasBookedBefore,
+    deleteBooking
 }
 
 export default BookingServices;

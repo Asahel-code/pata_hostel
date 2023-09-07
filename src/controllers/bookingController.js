@@ -190,6 +190,16 @@ const checkIfTenantHasBooked = async (req, res) => {
     }
 }
 
+const deleteBooking = async (req, res) => {
+    try {
+        await Tenant.deleteOne({_id: res.tenant.tenant._id});
+        return res.status(204).json({ message: "Booking deleted" });
+    }
+    catch (error) {
+        return res.status(error?.status || 500).json({ message: error?.message || error });
+    }
+};
+
 module.exports = {
     fetchAllLandLordTenants,
     getSingleBooking,
@@ -198,5 +208,6 @@ module.exports = {
     rentPayment,
     approvePayment,
     checkRoomAvailability,
-    checkIfTenantHasBooked
+    checkIfTenantHasBooked,
+    deleteBooking
 };
