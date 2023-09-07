@@ -3,7 +3,7 @@ import { Center, Text } from "@chakra-ui/react";
 import numberWithCommas from "../../utils/numberWithCommas";
 import CustomButton from "../../components/general/CustomButton";
 import { ImLocation } from "react-icons/im";
-import { BiMaleFemale } from "react-icons/bi";
+import { BiMaleFemale, BiMale, BiFemale } from "react-icons/bi";
 import RoomNumber from "../../components/general/RoomNumber";
 import HostelImage from "../../components/HostelImage";
 import Helmet from "../../components/general/Helemet";
@@ -79,10 +79,22 @@ export const HostelScreen = () => {
                                                         <ImLocation className="text-3xl text-primary_color" />
                                                         <span>{hostel?.house?.region?.name}</span>
                                                     </div>
-                                                    <div className="flex items-center gap-10 text-gray-600" id="rooms">
-                                                        <BiMaleFemale className="text-3xl text-primary_color" />
-                                                        <span>{hostel?.house?.gender}</span>
-                                                    </div>
+                                                    {hostel?.house?.gender?.toLowerCase() == "mixed" ? (
+                                                        <div className="flex items-center gap-10 text-gray-600" id="rooms">
+                                                            <BiMaleFemale className="text-3xl text-primary_color" />
+                                                            <span>{hostel?.house?.gender}</span>
+                                                        </div>
+                                                    ) : hostel?.house?.gender?.toLowerCase() == "male" ? (
+                                                        <div className="flex items-center gap-10 text-gray-600" id="rooms">
+                                                            <BiMale className="text-3xl text-primary_color" />
+                                                            <span>{hostel?.house?.gender}</span>
+                                                        </div>
+                                                    ): hostel?.house?.gender?.toLowerCase() == "female" && (
+                                                        <div className="flex items-center gap-10 text-gray-600" id="rooms">
+                                                            <BiFemale className="text-3xl text-primary_color" />
+                                                            <span>{hostel?.house?.gender}</span>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>

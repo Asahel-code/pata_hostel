@@ -3,7 +3,7 @@ import { Box, Text } from "@chakra-ui/react";
 import { Link } from 'react-router-dom';
 import numberWithCommas from "../utils/numberWithCommas";
 import { ImLocation } from "react-icons/im";
-import { BiMaleFemale } from "react-icons/bi";
+import { BiMaleFemale, BiMale, BiFemale  } from "react-icons/bi";
 import { GiPersonInBed } from "react-icons/gi";
 
 const Hostel = ({ hostel }) => {
@@ -27,10 +27,22 @@ const Hostel = ({ hostel }) => {
                                 <ImLocation className="text-xl text-primary_color" />
                                 <span>{hostel.region}</span>
                             </div>
-                            <div className="flex items-center gap-2 text-gray-600">
-                                <BiMaleFemale className="text-xl text-primary_color" />
-                                <span>{hostel.gender}</span>
-                            </div>
+                            {hostel?.gender?.toLowerCase() == "mixed" ? (
+                                <div className="flex items-center gap-2 text-gray-600">
+                                    <BiMaleFemale className="text-xl text-primary_color" />
+                                    <span>{hostel.gender}</span>
+                                </div>
+                            ) : hostel?.gender?.toLowerCase() == "male" ? (
+                                <div className="flex items-center gap-2 text-gray-600">
+                                    <BiMale className="text-xl text-primary_color" />
+                                    <span>{hostel.gender}</span>
+                                </div>
+                            ) : hostel?.gender?.toLowerCase() == "female" && (
+                                <div className="flex items-center gap-2 text-gray-600">
+                                    <BiFemale className="text-xl text-primary_color" />
+                                    <span>{hostel.gender}</span>
+                                </div>
+                            )}
                         </div>
 
                         <div className="flex justify-between">
