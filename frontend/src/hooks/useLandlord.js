@@ -47,7 +47,7 @@ export const useLandlord = (searchValue) => {
                 setFilteredLandlords(arr);
                 setStateLoading(false);
 
-                setLandlordCount(response?.reduce((acc, obj) => obj ? acc += 1 : acc, 0))
+                setLandlordCount(response?.reduce((acc, obj) => obj ? acc += 1 : acc, 0));
             })
                 .catch((error) => {
                     toast({
