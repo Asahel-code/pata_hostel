@@ -15,7 +15,12 @@ const checkLandlord = async (req, res) => {
         const landlord = await LandLordDetails.findOne({ user: req.userId });
 
         if (landlord) {
-            return res.status(200).json({ message: "Ok" });
+            if(landlord.subScriptionDueDate < new Date()){
+                return res.status(200).json({ message: "Subscription due" });
+            }
+            else{
+                return res.status(200).json({ message: "Ok" });
+            }
         }
         else {
             return res.status(200).json({ message: "Doesn't exist" });

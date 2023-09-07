@@ -394,7 +394,7 @@ export const LandlordProfileScreen = () => {
                                         <p className="font-semibold text-xl">Payment details</p>
                                     </div>
                                     {landlord?.isSubscribed ? (
-                                        landlord?.subScriptionDueDate >= Date.now() ? (
+                                        landlord?.subScriptionDueDate < new Date().toISOString() ? (
                                             <div className="mx-4">
                                                 <div className="flex justify-between items-center text-lg">
                                                     <p>Subscription fee:</p>

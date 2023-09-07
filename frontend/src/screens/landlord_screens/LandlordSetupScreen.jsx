@@ -30,8 +30,11 @@ export const LandlordSetupScreen = () => {
     useEffect(() => {
         try {
             LandLordServices.checkLandlord().then((response) => {
-                if (response.message === "Ok") {
+                if (response.message == "Ok") {
                     navigate('/')
+                }
+                else if (response.message == "Subscription due") {
+                    navigate('/landlord/profile')
                 }
             })
         } catch (error) {

@@ -17,9 +17,12 @@ const LandlordRoutesMiddleware = ({ children }) => {
   useEffect(() => {
     try {
       LandLordServices.checkLandlord().then((response) => {
-        if (response.message !== "Ok") {
+        if (response.message == "Doesn't exist") {
           navigate('/landlord/setup')
         }
+        else if (response.message == "Subscription due") {
+          navigate('/landlord/profile')
+      }
       })
     } catch (error) {
       toast({
