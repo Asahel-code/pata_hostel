@@ -14,7 +14,7 @@ import { BsCheck2Circle } from "react-icons/bs";
 import { TfiReload } from "react-icons/tfi";
 import { toastProps } from "../../utils/toastProps";
 import BookingServices from "../../utils/services/BookingServices";
-// import PaymentServices from "../../utils/services/PaymentServices";
+import PaymentServices from "../../utils/services/PaymentServices";
 import { getError } from "../../utils/getError";
 
 export const SingleBookingSreen = () => {
@@ -83,24 +83,24 @@ export const SingleBookingSreen = () => {
 
         if (!isValid) return;
 
-        // const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+        const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-        // try {
-        //     await PaymentServices.mpesaPayments(data).then(async (response) => {
-        //         if (response.errorCode) {
-        //             toast({
-        //                 ...toastProps,
-        //                 title: "Error!",
-        //                 description: response.errorMessage,
-        //                 status: "error",
-        //             });
-        //             setLoading(false);
-        //         }
-        //         else if (response.ResponseCode) {
-        //             await delay(15000);
-        //             try {
-        //                 await PaymentServices.queryMpesaPayments(response.CheckoutRequestID, data.businessCode).then(async (response) => {
-        //                     if (response.ResultCode == "0") {
+        try {
+            await PaymentServices.mpesaPayments(data).then(async (response) => {
+                if (response.errorCode) {
+                    toast({
+                        ...toastProps,
+                        title: "Error!",
+                        description: response.errorMessage,
+                        status: "error",
+                    });
+                    setLoading(false);
+                }
+                else if (response.ResponseCode) {
+                    await delay(15000);
+                    try {
+                        await PaymentServices.queryMpesaPayments(response.CheckoutRequestID, data.businessCode).then(async (response) => {
+                            if (response.ResultCode == "0") {
         const result = {
             months: state.months,
             paymentResult: null
@@ -125,41 +125,39 @@ export const SingleBookingSreen = () => {
             });
             setLoading(false);
         }
-        //                     }
-        //                     else {
-        //                         toast({
-        //                             ...toastProps,
-        //                             title: "Error!",
-        //                             description: "Payment wasn't processed successfully please try again",
-        //                             status: "error",
-        //                         });
-        //                         setLoading(false);
-        //                     }
-        //                 })
-        //             } catch (error) {
-        //                 toast({
-        //                     ...toastProps,
-        //                     title: "Error!",
-        //                     description: getError(error),
-        //                     status: "error",
-        //                 });
-        //                 setLoading(false);
-        //             }
-        //         }
-        //     })
-        // }
-        // catch (error) {
-        //     toast({
-        //         ...toastProps,
-        //         title: "Error!",
-        //         description: getError(error),
-        //         status: "error",
-        //     });
-        //     setLoading(false);
-        // }
+                            }
+                            else {
+                                toast({
+                                    ...toastProps,
+                                    title: "Error!",
+                                    description: "Payment wasn't processed successfully please try again",
+                                    status: "error",
+                                });
+                                setLoading(false);
+                            }
+                        })
+                    } catch (error) {
+                        toast({
+                            ...toastProps,
+                            title: "Error!",
+                            description: getError(error),
+                            status: "error",
+                        });
+                        setLoading(false);
+                    }
+                }
+            })
+        }
+        catch (error) {
+            toast({
+                ...toastProps,
+                title: "Error!",
+                description: getError(error),
+                status: "error",
+            });
+            setLoading(false);
+        }
     }
-
-    console.log(data.amount)
 
     return (
         <UserLayout>
