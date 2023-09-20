@@ -117,17 +117,17 @@ const updateHouse = async (req, res) => {
   if (existingProduct) slug = body.slug.toLowercase() + crypto.randomBytes(3).toString('hex');
   else slug = body.slug;
 
-  res.house.name = body?.name;
-  res.house.slug = slug;
-  res.house.gender = body?.gender;
-  res.house.description = body?.description;
-  res.house.numberOfRooms = body?.numberOfRooms;
-  res.house.numberPerRoom = body?.numberPerRoom;
-  res.house.houseNamingPattern = body?.houseNamingPattern;
-  res.house.rentalFee = body?.rentalFee;
+  res.house.house.name = body?.name;
+  res.house.house.slug = slug;
+  res.house.house.gender = body?.gender;
+  res.house.house.description = body?.description;
+  res.house.house.numberOfRooms = body?.numberOfRooms;
+  res.house.house.numberPerRoom = body?.numberPerRoom;
+  res.house.house.houseNamingPattern = body?.houseNamingPattern;
+  res.house.house.rentalFee = body?.rentalFee;
 
   try {
-    await res.house.save();
+    await res.house.house.save();
 
     return res.status(200).json({ message: `${body?.name} details have been updated successfully` })
   }
@@ -150,11 +150,11 @@ const updateHouseImages = async (req, res) => {
     }
   }
 
-  res.house.images = imagesArray;
+  res.house.house.images = imagesArray;
 
   try {
-    await res.house.save();
-    return res.status(200).json({ message: `${res.res.house.name} image has been updated successfully` })
+    await res.house.house.save();
+    return res.status(200).json({ message: `${res.house.house.name} image has been updated successfully` })
   } catch (error) {
     return res.status(error?.status || 500).json({ message: error?.message || error });
   }
@@ -162,7 +162,7 @@ const updateHouseImages = async (req, res) => {
 
 const deleteHouse = async (req, res) => {
   try {
-    await House.deleteOne({id: res.house._id});
+    await House.deleteOne({id: res.house.house._id});
     return res.status(204).json({ message: "House deleted" });
   }
   catch (error) {

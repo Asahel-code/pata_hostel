@@ -101,30 +101,30 @@ export const SingleBookingSreen = () => {
                     try {
                         await PaymentServices.queryMpesaPayments(response.CheckoutRequestID, data.businessCode).then(async (response) => {
                             if (response.ResultCode == "0") {
-        const result = {
-            months: state.months,
-            paymentResult: null
-        }
-        try {
-            await BookingServices.makePayment(booking?.tenant?._id, result).then((response) => {
-                toast({
-                    ...toastProps,
-                    title: "Success",
-                    description: response.message,
-                    status: "success",
-                })
-                setLoading(false);
-                window.location.reload();
-            })
-        } catch (error) {
-            toast({
-                ...toastProps,
-                title: "Error!",
-                description: getError(error),
-                status: "error",
-            });
-            setLoading(false);
-        }
+                                const result = {
+                                    months: state.months,
+                                    paymentResult: response
+                                }
+                                try {
+                                    await BookingServices.makePayment(booking?.tenant?._id, result).then((response) => {
+                                        toast({
+                                            ...toastProps,
+                                            title: "Success",
+                                            description: response.message,
+                                            status: "success",
+                                        })
+                                        setLoading(false);
+                                        window.location.reload();
+                                    })
+                                } catch (error) {
+                                    toast({
+                                        ...toastProps,
+                                        title: "Error!",
+                                        description: getError(error),
+                                        status: "error",
+                                    });
+                                    setLoading(false);
+                                }
                             }
                             else {
                                 toast({

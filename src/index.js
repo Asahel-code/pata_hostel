@@ -64,6 +64,9 @@ if (process.env.NODE_ENV === 'development') {
 if (process.env.NODE_ENV === 'production') {
   PORT = process.env.PROD_PORT
 }
+else{
+  PORT = process.env.PROD_PORT
+}
 
 mongoose.connection.once('open', () => {
   console.log('Connected to DB');

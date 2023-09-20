@@ -11,6 +11,9 @@ const connectDB = async () => {
     if (process.env.NODE_ENV === 'production') {
         dbURI = process.env.DATABASE_PROD_URL
     }
+    else{
+        dbURI = process.env.DATABASE_PROD_URL
+    }
     
     try {
         mongoose.set('strictQuery', true);
