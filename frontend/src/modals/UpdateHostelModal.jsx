@@ -45,7 +45,7 @@ const UpdateHostelModal = ({ handleOpen, handleClose, current }) => {
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        setState(...state, { [name]: value });
+        setState((prev) => ({ ...prev, [name]: value }));
     }
 
     const handleUpdate = async (e) => {

@@ -80,8 +80,8 @@ const createNewHouse = async (req, res) => {
   }
 
   let slug = '';
-  const existingProduct = await House.findOne({ slug: body.slug }).exec();
-  if (existingProduct) slug = body.slug + crypto.randomBytes(3).toString('hex');
+  const existingHouse = await House.findOne({ slug: body.slug }).exec();
+  if (existingHouse) slug = body.slug + crypto.randomBytes(3).toString('hex');
   else slug = body.slug;
 
   const newHouse = new House({
@@ -113,8 +113,8 @@ const updateHouse = async (req, res) => {
   const { body } = req;
 
   let slug = '';
-  const existingProduct = await Product.findOne({ slug: body.slug }).exec();
-  if (existingProduct) slug = body.slug.toLowercase() + crypto.randomBytes(3).toString('hex');
+  const existingHouse = await House.findOne({ slug: body.slug }).exec();
+  if (existingHouse) slug = body.slug + crypto.randomBytes(3).toString('hex');
   else slug = body.slug;
 
   res.house.house.name = body?.name;

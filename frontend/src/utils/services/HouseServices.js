@@ -41,7 +41,7 @@ const updateHouse = async (data, slug) => {
 
 const updateImagesHouse = async (formData, slug) => {
     setAuthToken(AxiosUtility);
-    const res = await AxiosUtility.patch(`/house/update-images/${slug}`, formData);
+    const res = await AxiosUtility.patch(`/house/update_images/${slug}`, formData);
 
     return res.data;
 }
