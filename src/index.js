@@ -33,6 +33,11 @@ app.use(express.urlencoded({ extended: true }));
 // middleware for json 
 app.use(express.json());
 
+// health check end point
+app.get('/health', (req, res) => {
+  res.status(200).json("OK");
+});
+
 
 app.use('/api/v1/register', v1RegisterRoutes);
 app.use('/api/v1/auth', v1AuthRoutes);
