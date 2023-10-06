@@ -33,7 +33,7 @@ const RequestPasswordChangeScreen = () => {
           status: "success",
         });
         setLoading(false);
-        navigate("/reset-password");
+        navigate("/reset_password");
       })
     } catch (error) {
       toast({
