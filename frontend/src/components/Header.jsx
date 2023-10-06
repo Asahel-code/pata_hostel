@@ -41,13 +41,13 @@ const Header = () => {
 
     const userNavList = (
         <Box className="flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
-            <Link to="/about" className="hover:text-primary_color hover:font-medium text-md">
+            {/* <Link to="/about" className="hover:text-primary_color hover:font-medium text-md">
                 About us
             </Link>
 
             <Link to="/contact" className="hover:text-primary_color hover:font-medium text-md">
                 Contact us
-            </Link>
+            </Link> */}
             <Box>
                 {user?.token
                     ? (

@@ -14,14 +14,14 @@ const FooterSection = () => {
             display: "Home",
             path: "/",
         },
-        {
-            display: "About us",
-            path: "/about",
-        },
-        {
-            display: "Contact us",
-            path: "/contact",
-        },
+        // {
+        //     display: "About us",
+        //     path: "/about",
+        // },
+        // {
+        //     display: "Contact us",
+        //     path: "/contact",
+        // },
         {
             display: "Manage your hostel with us",
             path: "/landlord/register",
