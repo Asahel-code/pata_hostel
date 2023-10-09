@@ -11,13 +11,14 @@ body {
         sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: green !important;
+    
 }
 
 .shrink {
     height: 60px;
     background: #FFF !important;
-    box-shadow: #0488d4 0px 8px 24px;
+    background-color: green !important;
+    /* box-shadow: #0488d4 0px 8px 24px; */
     z-index: 100;
 }
 
