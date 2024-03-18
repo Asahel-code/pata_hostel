@@ -16,7 +16,7 @@ body {
 .shrink {
     height: 60px;
     background: #FFF !important;
-    box-shadow: #05A3FF 0px 8px 24px;
+    box-shadow: #0488d4 0px 8px 24px;
     z-index: 100;
 }
 
