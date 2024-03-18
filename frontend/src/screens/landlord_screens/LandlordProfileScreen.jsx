@@ -17,6 +17,7 @@ import { getError } from "../../utils/getError";
 import PaymentServices from "../../utils/services/PaymentServices";
 import { BsCheck2Circle } from "react-icons/bs";
 import { convertDateTimeFormart } from "../../utils/timeFormat";
+import PreNumberFormart from "../../components/general/PreNumberFormart";
 
 
 export const LandlordProfileScreen = () => {
@@ -405,6 +406,14 @@ export const LandlordProfileScreen = () => {
                                                 <div className="mt-4 flex flex-col gap-2">
                                                     <p className="font-semibold text-md">Payment option:</p>
                                                     <img src={mpesaLogo} alt="Mpesa" className="w-44 h-8" />
+                                                    <div className="my-3">
+                                                        <p className="font-semibold text-md">Payment details:</p>
+                                                        <ul className="ml-5 list-disc">
+                                                            <li>Paybill number: <span className="font-semibold">174379</span></li>
+                                                            <li>Account: <span className="font-semibold">Pata Hostel ltd</span></li>
+                                                            <li>Amount: <span className="font-semibold">{landlord?.subScriptionfee}</span></li>
+                                                        </ul>
+                                                    </div>
                                                 </div>
 
                                                 <Box className="flex flex-col gap-1 w-full">
@@ -458,6 +467,14 @@ export const LandlordProfileScreen = () => {
                                             <div className="mt-4 flex flex-col gap-2">
                                                 <p className="font-semibold text-md">Payment option:</p>
                                                 <img src={mpesaLogo} alt="Mpesa" className="w-44 h-8" />
+                                                <div className="my-3">
+                                                    <p className="font-semibold text-md">Payment details:</p>
+                                                    <ul className="ml-5 list-disc">
+                                                        <li>Paybill number: <span className="font-semibold">174379</span></li>
+                                                        <li>Account: <span className="font-semibold">Pata Hostel ltd</span></li>
+                                                        <li>Amount: <span className="font-semibold">{landlord?.subScriptionfee}</span></li>
+                                                    </ul>
+                                                </div>
                                             </div>
 
                                             <Box className="flex flex-col gap-1 w-full">
@@ -499,9 +516,4 @@ export const LandlordProfileScreen = () => {
     )
 }
 
-const PreNumberFormart = () => (
-    <div className="bg-[#EEEEEE] h-10 px-5 flex items-center">
-        <span>+254</span>
-    </div>
-)
 

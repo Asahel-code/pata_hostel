@@ -10,6 +10,7 @@ import { toastProps } from "../../utils/toastProps";
 import { useNavigate } from "react-router-dom";
 import LandLordServices from "../../utils/services/LandLordServices";
 import { getError } from "../../utils/getError";
+import PreNumberFormart from "../../components/general/PreNumberFormart";
 
 export const LandlordSetupScreen = () => {
     const toast = useToast();
@@ -279,8 +280,3 @@ export const LandlordSetupScreen = () => {
     )
 }
 
-const PreNumberFormart = () => (
-    <div className="bg-[#EEEEEE] h-10 px-5 flex items-center">
-        <span>+254</span>
-    </div>
-)

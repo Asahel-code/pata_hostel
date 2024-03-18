@@ -15,24 +15,26 @@ const LandlordRoutesMiddleware = ({ children }) => {
   const toast = useToast();
 
   useEffect(() => {
-    try {
-      LandLordServices.checkLandlord().then((response) => {
-        if (response.message == "Doesn't exist") {
-          navigate('/landlord/setup')
+    if(user.token && user.isVerified){
+      try {
+        LandLordServices.checkLandlord().then((response) => {
+          if (response.message == "Doesn't exist") {
+            navigate('/landlord/setup')
+          }
+          else if (response.message == "Subscription due") {
+            navigate('/landlord/profile')
         }
-        else if (response.message == "Subscription due") {
-          navigate('/landlord/profile')
+        })
+      } catch (error) {
+        toast({
+          ...toastProps,
+          title: "Error!",
+          description: getError(error),
+          status: "error",
+        })
       }
-      })
-    } catch (error) {
-      toast({
-        ...toastProps,
-        title: "Error!",
-        description: getError(error),
-        status: "error",
-      })
     }
-  }, [navigate, toast]);
+  }, [navigate, toast, user.isVerified, user.token]);
 
   return user.token && !user.isVerified ? <Navigate to="/verify_your_account" /> : (user?.token && user?.isLandLord) ? <>{children}</> : <Page403Screen />;
 };

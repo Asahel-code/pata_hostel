@@ -100,3 +100,33 @@ export const useSpecificLandLord = () => {
 
     return { stateLoading, landlord };
 }
+
+export const useSpecificLandLordAdmin = (id) => {
+    const toast = useToast();
+
+    const [landlord, setLandlord] = useState(undefined);
+    const [stateLoading, setStateLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchLandlord = async () => {
+            await LandLordServices.adminFetchLandLordDetails(id).then((response) => {
+                setLandlord(response);
+                setStateLoading(false);
+            })
+                .catch((error) => {
+                    toast({
+                        ...toastProps,
+                        title: "Error!",
+                        description: getError(error),
+                        status: "error",
+                    });
+                    setStateLoading(false);
+                })
+        }
+
+        fetchLandlord();
+    }, [toast, id]);
+
+
+    return { stateLoading, landlord };
+}

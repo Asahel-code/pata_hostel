@@ -1,4 +1,5 @@
 const LandLordDetails = require('../models/LandLordDetails');
+const User = require('../models/User');
 
 const fetchAllLandLord = async (req, res) => {
     try {
@@ -104,11 +105,22 @@ const payforSubscription = async (req, res) => {
     }
 }
 
+const deleteLandLordDetails = async (req, res) => {
+    try {
+        await User.deleteOne({_id: res.landlord.user});
+        await LandLordDetails.deleteOne({_id: res.landlord._id});
+    return res.status(204).json({ message: "Landlord deleted" });
+    } catch (error) {
+        return res.status(error?.status || 500).json({ message: error?.message || error });
+    }
+}
+
 module.exports = {
     fetchAllLandLord,
     checkLandlord,
     fetchLandLordDetails,
     addLandLordDetails,
     updateLandLordDetails,
-    payforSubscription
+    payforSubscription,
+    deleteLandLordDetails
 }

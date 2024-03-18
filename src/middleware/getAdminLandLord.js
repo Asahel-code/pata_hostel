@@ -1,12 +1,20 @@
 const LandLordDetails = require("../models/LandLordDetails");
 
-const getLandLord = async (req, res, next) => {
+const getAdminLandLord = async (req, res, next) => {
+
+    const {
+        params: { landlordId },
+    } = req;
  
     let landlord;
+
+    if (!landlordId) {
+        res.status(400).json({ "message": "Parameter landlordId can not be empty" });
+    }
     
 
     try {
-        landlord = await LandLordDetails.findOne({user: req.userId});
+        landlord = await LandLordDetails.findOne({_id: landlordId});
         if (landlord === null) return res.status(404).json({ message: "This landlord is not available" })
     }
     catch (error) {
@@ -17,4 +25,4 @@ const getLandLord = async (req, res, next) => {
     next()
 }
 
-module.exports = getLandLord;
+module.exports = getAdminLandLord;

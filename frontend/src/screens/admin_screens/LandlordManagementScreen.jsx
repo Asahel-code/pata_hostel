@@ -1,17 +1,71 @@
 import AdminLayout from "../../components/AdminLayout";
+import { useToast } from "@chakra-ui/react";
 import { ConfigProvider, Table } from "antd";
 import Wrapper from '../../components/general/Wrapper';
 import { IoSearchOutline } from "react-icons/io5";
 import CustomInput from "../../components/general/CustomInput";
 import { useLandlord } from "../../hooks/useLandlord";
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import ActionButton from "../../components/general/ActionButton";
+import { FiEdit } from "react-icons/fi";
+import { AiOutlineDelete } from "react-icons/ai";
+import LandLordServices from "../../utils/services/LandLordServices";
+import { toastProps } from "../../utils/toastProps";
+import { getError } from "../../utils/getError";
+import UpdateLandLordModal from "../../modals/UpdateLandLordModal";
+import DeleteAlert from "../../components/general/DeleteAlert";
 
 
 export const LandlordManagementScreen = () => {
 
   const [searchValue, setSearchValue] = useState("");
+  const [openUpdateLandLordDetailsModal, setOpenUpdateLandLordDetailsModal] = useState(false);
+  const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
+  const [landLordId, setLandLordId] = useState("");
 
-  const { stateLoading, filteredLandlords } = useLandlord(searchValue)
+  const toast = useToast();
+
+  const { stateLoading, filteredLandlords } = useLandlord(searchValue);
+
+  const handleOpenUpdateLandLordDetailsModal = useCallback(() => {
+    setOpenUpdateLandLordDetailsModal(true);
+  }, []);
+
+  const handleCloseUpdateLandLordDetailsModal = useCallback(() => {
+    setOpenUpdateLandLordDetailsModal(false);
+  }, []);
+
+  const handleOpenDeleteAlert = useCallback(() => {
+    setOpenDeleteAlert(true);
+  }, []);
+
+  const handleCloseDeleteAlert = useCallback(() => {
+    setOpenDeleteAlert(false);
+  }, []);
+
+
+  const handleDelete = async (id) => {
+    try {
+      await LandLordServices.adminDeleteLandLordDetails(id).then(() => {
+        toast({
+          ...toastProps,
+          title: "Success",
+          description: "Landlord details have been deleted successfully",
+          status: "success",
+        });
+      });
+      handleCloseDeleteAlert();
+      window.location.reload();
+    } catch (error) {
+      toast({
+        ...toastProps,
+        title: "Error!",
+        description: getError(error),
+        status: "error",
+      });
+      handleCloseDeleteAlert();
+    }
+  }
   const columns = [
     {
       title: "Lanlord name",
@@ -37,6 +91,29 @@ export const LandlordManagementScreen = () => {
             <div className={`${bg} rounded-md font-medium text-center text-gray-800 capitalize text-md px-2 py-1`}>
               {text}
             </div>
+          </div>
+        );
+      },
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      render: (_, n) => {
+        return (
+          <div className="flex gap-6 justify-start">
+            <ActionButton handleClick={() => {
+              handleOpenUpdateLandLordDetailsModal();
+              setLandLordId(n?.id);
+            }}>
+              <FiEdit />
+            </ActionButton>
+
+            <ActionButton handleClick={() => {
+              handleOpenDeleteAlert();
+              setLandLordId(n?.id);
+            }}>
+              <AiOutlineDelete />
+            </ActionButton>
           </div>
         );
       },
@@ -82,6 +159,20 @@ export const LandlordManagementScreen = () => {
             </ConfigProvider>
           </div>
         </Wrapper>
+
+        {landLordId && <UpdateLandLordModal
+          handleOpen={openUpdateLandLordDetailsModal}
+          handleClose={handleCloseUpdateLandLordDetailsModal}
+          landLordId={landLordId}
+        />}
+
+        {landLordId && <DeleteAlert
+          handleOpen={openDeleteAlert}
+          handleClose={handleCloseDeleteAlert}
+          handleDelete={handleDelete}
+          body={"Are you sure you would like to delete this landlord?"}
+          id={landLordId}
+        />}
       </div>
     </AdminLayout>
   )

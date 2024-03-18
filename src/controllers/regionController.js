@@ -52,8 +52,7 @@ const updateRegion = async (req, res) => {
 
 const deleteRegion = async (req, res) => {
     try {
-        await res.region.remove();
-
+        await Region.deleteOne({_id:  res.region._id});
         return res.status(200).json({ message: "Region deleted" });
     } catch (error) {
         return res.status(error?.status || 500).json({ message: error?.message || error });

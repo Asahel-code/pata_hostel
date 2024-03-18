@@ -43,6 +43,27 @@ const payForSubscription = async (data) => {
     return res.data;
 }
 
+const adminFetchLandLordDetails = async (id) => {
+    setAuthToken(AxiosUtility);
+    const res = await AxiosUtility.get(`/landlord/admin/${id}`);
+
+    return res.data;
+}
+
+const adminUpdateLandLordDetails = async (data, id) => {
+    setAuthToken(AxiosUtility);
+    const res = await AxiosUtility.patch(`/landlord/admin/${id}`, data);
+
+    return res.data;
+}
+
+const adminDeleteLandLordDetails = async (id) => {
+    setAuthToken(AxiosUtility);
+    const res = await AxiosUtility.delete(`/landlord/admin/${id}`);
+
+    return res.data;
+}
+
 
 const LandLordServices = {
     fetchAllLandLord,
@@ -50,7 +71,10 @@ const LandLordServices = {
     addLandLordDetails,
     fetchLandLordDetails,
     updateLandLordDetails,
-    payForSubscription
+    payForSubscription,
+    adminFetchLandLordDetails,
+    adminUpdateLandLordDetails,
+    adminDeleteLandLordDetails
 }
 
 export default LandLordServices;
