@@ -42,7 +42,7 @@ const TopBanner = ({ handleChange, loading, handleSearch, state }) => {
                         <p className="text-gray-500" data-aos="fade-down">What to find a hostel? We are ready to help you find one that suit your needs and budget</p>
                         <div className="md:py-8 py-4" data-aos="fade-down">
                             <CustomButton variant={"solid"} width={"200px"} handleClick={handleScrollToHostels}>
-                                Check out
+                                Explore
                             </CustomButton>
                         </div>
                         <div className="grid grid-cols-3 gap-3 pb-5">

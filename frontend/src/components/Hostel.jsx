@@ -11,8 +11,8 @@ const Hostel = ({ hostel }) => {
         <div data-aos="fade-up">
             <Link to={`/hostel/${hostel.slug}`}>
                 <Box className="w-full shadow-none rounded-lg hover:shadow-2xl border-[1px] border-gray-200 hover:border-0 hover:scale-105 transition-all">
-                    <Box className="relative h-68 m-0">
-                        <div className="rounded-t-lg">
+                    <Box className="m-0">
+                        <div className="rounded-t-lg h-64">
                             <img src={hostel.images[0]} alt="hostel" className="h-full w-full object-cover rounded-t-lg" />
                         </div>
                     </Box>
